@@ -23,19 +23,16 @@ display(p)
 
 n = 2
 N = rand(-n:0.1:n,1,800)
-M = M1 .+ M2 .+ transpose(N)
+M = vec(M1 .+ M2 .+ transpose(N))
 
 display(plot(scatter(mode="lines", x=1:length(M), y=M[:], name="M", line_shape="hvh",line=attr(color="green"))))
 
-S1 = transpose(S1)
-S1 = vcat(S1,zeros(Int64,700,1))
-R1 = crosscov(M,S1)
+l=vec(-100:799)
+S1 = vec(hcat(S1,zeros(Int64,1,700)))
+R1 = crosscor(S1,M,l;demean=false)*(800+800-1)
 
-S2 = transpose(S2)
-S2 = vcat(S2,zeros(Int64,700,1))
-R2 = crosscov(M,S2)
-
-println(size(R1))
+S2 = vec(hcat(S2,zeros(Int64,1,700)))
+R2 = crosscor(S2,M,l;demean=false)*(800+800-1)
 
 p7 = plot(scatter(mode="lines", x=1:length(R1), y=R1[:], name="R1", line_shape="hvh",line=attr(color="royalblue")))
 p8 = plot(scatter(mode="lines", x=1:length(R2), y=R2[:], name="R2", line_shape="hvh",line=attr(color="firebrick")))
